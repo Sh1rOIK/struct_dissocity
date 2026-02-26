@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <filesystem>
 #include <string_view>
 
 class struct_dissociaty {
@@ -57,7 +58,7 @@ public:
 
 	static void saveAllToFile(const std::string& filename) {
 		std::ofstream file(filename);
-		if (!file) return; //checking if file is open
+		if (!file) return; // проверка открыт файл или нет
 
 		for (auto& alter : all_alters) {
 			alter.saveToFile(file);
@@ -72,6 +73,31 @@ public:
 
 		std::string line;
 		while (std::getline(file, line)) {
+			if (line.find('|') == std::string::npos) {
+				std::cout << "[Error] file is broken!\n";
+
+				file.close();
+				char choice;
+				std::cout << "Delete broken file?(y/n): ";
+				
+				while (true) {
+
+					if (!(std::cin >> choice)) {
+						std::cin.clear();
+						std::cin.ignore(10000, '\n');
+						continue;
+					}
+					std::cin.ignore(10000, '\n');
+					if (choice == 'y' || choice == 'Y') {
+						struct_dissociaty::removeFile(filename); 
+						std::cout << "File is delete!\n"; break;
+					}
+					else {
+						std::cout << "[Error] input char is not correct\n";
+					}
+				}
+				break;
+			}
 			std::string_view sv = line;
 			size_t delimiter = line.find('|');
 
@@ -84,6 +110,18 @@ public:
 		}
 		struct_dissociaty::showAlter();
 	}
+
+	static void removeFile(const std::string& filename) {
+		std::filesystem::path p(filename);
+
+		if (std::filesystem::exists(p)) {
+			std::filesystem::remove(p);
+			std::cout << "[System] file " << filename << "deleted successfully\n";
+		}
+		else {
+			std::cout << "[Error] can't delete: file " << filename << "not find\n";
+		}
+	}
 };
 
 std::vector<struct_dissociaty> struct_dissociaty::all_alters;
@@ -94,12 +132,18 @@ int main() {
 	std::string func;
 	int count;
 
-	std::cout << "count: ";
-	std::cin >> count;
-	std::cin.ignore();
+	while (true) {
+
+		std::cout << "count: ";
+		std::cin >> count;
+		std::cin.ignore();
+		if (count <= 0) break;
+		std::cout << "[Error] count need be positive. " << std::endl;
+
+	}
 
 	for (int i = 0; i < count; i++) {
-		std::cout << "\nAlter #" << i + 1 << ":\n";
+		std::cout << "\nAlter # " << i + 1 << ":\n";
 
 		std::cout << "Name: ";
 		std::getline(std::cin, name);
@@ -107,8 +151,8 @@ int main() {
 		std::getline(std::cin, func);
 
 		struct_dissociaty::addAlter(name, func);
-
 	}
+
 
 	std::cout << "\n--- All alters ---\n";
 	struct_dissociaty::showAlter();
@@ -117,8 +161,17 @@ int main() {
 	std::cout << "\n save? (y/n): ";
 	std::cin >> ch;
 
-	if (ch == 'y' || ch == 'Y') {
-		struct_dissociaty::saveAllToFile("alters.txt");
+	while (true) {
+
+		if (ch == 'y' || ch == 'Y') {
+			struct_dissociaty::saveAllToFile("alters.txt"); break;
+		}
+		else if (ch == 'n' || ch == 'N') {
+			std::cout << "File is not saved" << std::endl; break;
+		}
+		else {
+			std::cout << "[Error] input char is not correct" << std::endl;
+		}
 	}
 
 	return 0;
