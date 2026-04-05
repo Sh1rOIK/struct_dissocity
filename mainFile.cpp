@@ -134,11 +134,15 @@ int main() {
 
 	while (true) {
 
-		std::cout << "count: ";
+		std::cout << "Count: ";
 		std::cin >> count;
 		std::cin.ignore();
-		if (count <= 0) break;
-		std::cout << "[Error] count need be positive. " << std::endl;
+		if (count > 0) {
+			break;
+		}
+		else {
+			std::cout << "[Error] count need be positive. " << std::endl;
+		}
 
 	}
 
@@ -153,12 +157,11 @@ int main() {
 		struct_dissociaty::addAlter(name, func);
 	}
 
-
 	std::cout << "\n--- All alters ---\n";
 	struct_dissociaty::showAlter();
 
 	char ch;
-	std::cout << "\n save? (y/n): ";
+	std::cout << "\nsave&(y/n): ";
 	std::cin >> ch;
 
 	while (true) {
@@ -175,4 +178,4 @@ int main() {
 	}
 
 	return 0;
-}
+} 
