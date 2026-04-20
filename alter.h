@@ -7,8 +7,10 @@ private:
 	std::string name_alter;
 	std::string function_alter;
 public:
-	void addAlter(const std::string& name, const std::string& func);
+	Alter();
+	Alter(std::string name, std::string func);
+	std::string getName() const;
+	std::string getFunc() const;
 	void setAlters(std::string n, std::string f);
 	void alter_info();
-	struct_dissociaty(std::string name, std::string func);
 };
