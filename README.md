@@ -1,5 +1,4 @@
 # Struct_dissociaty
-Version: 1.0
 Language: C++
 Type: Console Application / Class Library
 
