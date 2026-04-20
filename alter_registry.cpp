@@ -3,6 +3,8 @@
 #include <utility>
 #include <iostream>
 
+std::vector<Alter> Alter_registry::all_alters;
+
 void Alter_registry::addAlter(const std::string& name, const std::string& func) {
 	all_alters.emplace_back(name, func);
 }

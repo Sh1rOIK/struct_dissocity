@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include "Alter_registry.h"
 
 class File_manager {
 public:
